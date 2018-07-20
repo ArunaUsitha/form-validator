@@ -35,6 +35,8 @@
  */
 var validator = function validateForm(formID) {
 
+    var results = {};
+    var status = true;
 
     function addStyles(selector, response) {
         selector.parent().find('.verror').html(response).css({
@@ -52,11 +54,8 @@ var validator = function validateForm(formID) {
         selector.parent().parent().removeClass('has-error');
     }
 
-    var requiredState = true;
-    var lengthState = true;
-    var telephoneState = true;
-    var emailState = true;
-    var passwordState = true;
+
+
 
     // check and validate
     function checkAndValidate(dataAttributes, element) {
@@ -67,17 +66,15 @@ var validator = function validateForm(formID) {
         $.each(attributes, function (index, value) {
 
 
-
             //required
             if (value === 'required') {
 
                 if (element.val() === '') {
-                    addStyles(element, 'This field is required!')
-                    requiredState = false;
-
+                    addStyles(element, 'This field is required!');
+                    results[element[0].id] = false;
                 } else {
-                    removeStyles(element)
-                    requiredState = true;
+                    removeStyles(element);
+                    results[element[0].id] = true;
                 }
                 // return false;
 
@@ -89,10 +86,10 @@ var validator = function validateForm(formID) {
                 var length = value.split('=')[1];
                 if (!(element.val().length > length)) {
                     addStyles(element, 'This value should be ' + length + ' characters');
-                    lengthState = false;
+                    results[element[0].id] = false;
                 } else {
                     removeStyles(element);
-                    lengthState = true;
+                    results[element[0].id] = true;
                 }
             }
 
@@ -101,10 +98,10 @@ var validator = function validateForm(formID) {
                 var regx = /^[0-9]+$/;
                 if (element.val().length < 10 || element.val().length > 10 || !(element.val().match(regx))) {
                     addStyles(element, 'Enter a valid phone No (10 characters excluding +94)');
-                    telephoneState = false;
+                    results[element[0].id] = false;
                 } else {
                     removeStyles(element);
-                    telephoneState = true;
+                    results[element[0].id] = true;
                 }
             }
 
@@ -113,11 +110,10 @@ var validator = function validateForm(formID) {
                 var emil = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (!(element.val().match(emil))) {
                     addStyles(element, 'Enter valid Email Address');
-                    emailState = false;
-
+                    results[element[0].id] = false;
                 } else {
                     removeStyles(element);
-                    emailState = true;
+                    results[element[0].id] = true;
                 }
             }
 
@@ -130,37 +126,43 @@ var validator = function validateForm(formID) {
                     if (!(element.val() === conf.val())) {
                         addStyles(element, 'Passwords doesn\'t match');
                         addStyles(conf, 'Passwords doesn\'t match');
-                        passwordState = false;
+                        results[element[0].id] = false;
                     } else {
                         removeStyles(element);
                         removeStyles(conf);
-                        passwordState = true;
+                        results[element[0].id] = true;
                     }
                 }
             }
 
         });
 
-
-        return requiredState === true && lengthState === true && telephoneState === true && emailState === true && passwordState === true;
     }
 
-
     var clss = '.validate';
-    // data attribute that used for the validation 'data-validate';
-
 
     var inputs = $(formID + ' ' + clss);
-    var status = true;
-    if (inputs.length > 1) {
-        status = false;
+
+    if (inputs.length > 0) {
+
         $.each(inputs, function (index, value) {
             var selector = $(this);
-            status = checkAndValidate($(this).data('validate'), selector);
+            checkAndValidate($(this).data('validate'), selector);
         })
     }
 
+    $.each(results, function (index, value) {
+
+        if (value == false) {
+            status = false;
+            return false
+        }
+
+    });
+
     return status;
-}
+
+
+};
 
 
