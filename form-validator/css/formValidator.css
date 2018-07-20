@@ -1,0 +1,23 @@
+
+.has-error .form-control {
+    border-color: #D81159;
+
+}
+
+.has-error .checkbox,
+.has-error .checkbox-inline,
+.has-error .control-label,
+.has-error .help-block,
+.has-error .radio,
+.has-error .radio-inline,
+.has-error.checkbox label,
+.has-error.checkbox-inline label,
+.has-error.radio label,
+.has-error.radio-inline label{
+    color: #D81159;
+}
+
+.verror{
+    color: #D81159;
+    font-size: 11px;
+}
