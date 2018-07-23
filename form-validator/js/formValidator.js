@@ -55,11 +55,12 @@ var validator = function validateForm(formID) {
     }
 
 
-
-
     // check and validate
     function checkAndValidate(dataAttributes, element) {
 
+
+
+        if (element[0].id !== ''){
 
         var attributes = dataAttributes.split(',');
 
@@ -68,7 +69,6 @@ var validator = function validateForm(formID) {
 
             //required
             if (value === 'required') {
-
                 if (element.val() === '') {
                     addStyles(element, 'This field is required!');
                     results[element[0].id] = false;
@@ -96,32 +96,42 @@ var validator = function validateForm(formID) {
             //telephone no
             if (value === 'telephone') {
                 var regx = /^[0-9]+$/;
-                if (element.val().length < 10 || element.val().length > 10 || !(element.val().match(regx))) {
-                    addStyles(element, 'Enter a valid phone No (10 characters excluding +94)');
-                    results[element[0].id] = false;
+                if (element.val().length > 0) {
+                    if (element.val().length < 10 || element.val().length > 10 || !(element.val().match(regx))) {
+                        addStyles(element, 'Enter a valid phone No (10 characters excluding +94)');
+                        results[element[0].id] = false;
+                    } else {
+                        removeStyles(element);
+                        results[element[0].id] = true;
+                    }
                 } else {
                     removeStyles(element);
-                    results[element[0].id] = true;
+                    // results[element[0].id] = true;
                 }
             }
 
             //email
             if (value === 'email') {
-                var emil = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                if (!(element.val().match(emil))) {
-                    addStyles(element, 'Enter valid Email Address');
-                    results[element[0].id] = false;
+                if (element.val().length > 0) {
+                    var emil = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    if (!(element.val().match(emil))) {
+                        addStyles(element, 'Enter valid Email Address');
+                        results[element[0].id] = false;
+                    } else {
+                        removeStyles(element);
+                        results[element[0].id] = true;
+                    }
                 } else {
                     removeStyles(element);
-                    results[element[0].id] = true;
+                    // results[element[0].id] = true;
                 }
             }
 
 
             //password
             if (value === 'password') {
-                if (element.val() !== '') {
 
+                if (element.val() !== '') {
                     var conf = $(element).parent().parent().parent().find('[data-validate*="passwordconfirm"]');
                     if (!(element.val() === conf.val())) {
                         addStyles(element, 'Passwords doesn\'t match');
@@ -133,9 +143,15 @@ var validator = function validateForm(formID) {
                         results[element[0].id] = true;
                     }
                 }
+
             }
 
         });
+
+        }else {
+            throw "Critical error, Elements ID not defined in : " + element.attr('name') + ". validation falied.!";
+            status = false
+        }
 
     }
 
@@ -145,20 +161,29 @@ var validator = function validateForm(formID) {
 
     if (inputs.length > 0) {
 
+        // noinspection JSAnnotator
         $.each(inputs, function (index, value) {
+
             var selector = $(this);
-            checkAndValidate($(this).data('validate'), selector);
+            try {
+                checkAndValidate($(this).data('validate'), selector);
+            }catch (e) {
+                console.error(e)
+                return false;
+            }
+
         })
     }
 
     $.each(results, function (index, value) {
 
+
         if (value == false) {
             status = false;
             return false
         }
-
     });
+
 
     return status;
 
