@@ -1,14 +1,14 @@
 # form-validator
 A simple form validate plugin used to validate HTML Forms.  
 
-##Author :Aruna|Killer
+## Author :Aruna|Killer
 
  used to validate html input elements on the fly
  of a form
 
  required Jquery library 2.00 or higher
 
-##usage
+## usage
 
   inputs should be in a form group, the bootstrap way.
   
