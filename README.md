@@ -29,11 +29,11 @@ A simple form validate plugin used to validate HTML Forms.
   for the input field that you want to validate add the class 'validate'
   then add the types you want to validate Ex: password,required,length as comma seperated data attributes
 
-  data-validate = 'required,length=10,password'
+  data-validate = 'required,length=10,password,email'
 
   then call the method using the form id
 
-    validateForm('#form-to-validate');
+    validator({formID: '#garbageTab', animate: false})
 
   and the script shoud be included on the bottom of the page
 
