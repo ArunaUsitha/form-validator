@@ -33,7 +33,7 @@ A simple form validate plugin used to validate HTML Forms.
 
   then call the method using the form id
 
-    validator({formID: '#garbageTab', animate: false})
+    validator({formID: '#DummyForm', animate: false})
 
   and the script shoud be included on the bottom of the page
 
