@@ -33,7 +33,22 @@
  *
  *
  */
-var validator = function validateForm(formID) {
+var validator = function validateForm(parameters) {
+
+
+    let formID = parameters.formID;
+    let animate = parameters.animate;
+    let cssClass = 'animate shake';
+
+    function shake(formID) {
+        if (animate !== undefined) {
+            $(formID).addClass(cssClass).delay(1000).queue(function(next){
+                $(this).removeClass(cssClass);
+                next();
+            });
+        }
+    }
+
 
     var results = {};
     var status = true;
@@ -60,95 +75,115 @@ var validator = function validateForm(formID) {
 
 
 
-        if (element[0].id !== ''){
+        if (element[0].id !== '') {
 
-        var attributes = dataAttributes.split(',');
+            var attributes = dataAttributes.split(',');
 
-        $.each(attributes, function (index, value) {
-
-
-            //required
-            if (value === 'required') {
-                if (element.val() === '') {
-                    addStyles(element, 'This field is required!');
-                    results[element[0].id] = false;
-                } else {
-                    removeStyles(element);
-                    results[element[0].id] = true;
-                }
-                // return false;
-
-            }
+            $.each(attributes, function (index, value) {
 
 
-            //length
-            if ((/length/).test(value)) {
-                var length = value.split('=')[1];
-                if (!(element.val().length > length)) {
-                    addStyles(element, 'This value should be ' + length + ' characters');
-                    results[element[0].id] = false;
-                } else {
-                    removeStyles(element);
-                    results[element[0].id] = true;
-                }
-            }
-
-            //telephone no
-            if (value === 'telephone') {
-                var regx = /^[0-9]+$/;
-                if (element.val().length > 0) {
-                    if (element.val().length < 10 || element.val().length > 10 || !(element.val().match(regx))) {
-                        addStyles(element, 'Enter a valid phone No (10 characters excluding +94)');
+                //required
+                if (value === 'required') {
+                    if (element.val() === '') {
+                        addStyles(element, 'This field is required!');
                         results[element[0].id] = false;
                     } else {
                         removeStyles(element);
                         results[element[0].id] = true;
                     }
-                } else {
-                    removeStyles(element);
-                    // results[element[0].id] = true;
-                }
-            }
+                    // return false;
 
-            //email
-            if (value === 'email') {
-                if (element.val().length > 0) {
-                    var emil = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                    if (!(element.val().match(emil))) {
-                        addStyles(element, 'Enter valid Email Address');
+                }
+
+
+                //length
+                if ((/length/).test(value)) {
+                    var length = value.split('=')[1];
+                    if (!(element.val().length > length)) {
+                        addStyles(element, 'This value should be ' + length + ' characters');
                         results[element[0].id] = false;
                     } else {
-                        removeStyles(element);
-                        results[element[0].id] = true;
-                    }
-                } else {
-                    removeStyles(element);
-                    // results[element[0].id] = true;
-                }
-            }
-
-
-            //password
-            if (value === 'password') {
-
-                if (element.val() !== '') {
-                    var conf = $(element).parent().parent().parent().find('[data-validate*="passwordconfirm"]');
-                    if (!(element.val() === conf.val())) {
-                        addStyles(element, 'Passwords doesn\'t match');
-                        addStyles(conf, 'Passwords doesn\'t match');
-                        results[element[0].id] = false;
-                    } else {
-                        removeStyles(element);
-                        removeStyles(conf);
+                        // removeStyles(element);
                         results[element[0].id] = true;
                     }
                 }
 
-            }
+                //telephone no
+                if (value === 'telephone') {
+                    console.log(element)
+                    var regx = /^[0-9]+$/;
+                    if (element.val().length > 0) {
+                        if (element.val().length < 10 || element.val().length > 10 || !(element.val().match(regx))) {
+                            addStyles(element, 'Enter a valid phone No (10 characters excluding +94)');
+                            results[element[0].id] = false;
+                        } else {
+                            removeStyles(element);
+                            results[element[0].id] = true;
+                        }
+                    } else {
+                        // removeStyles(element);
+                        // results[element[0].id] = true;
+                    }
+                }
 
-        });
+                //email
+                if (value === 'email') {
 
-        }else {
+                    if (element.val().length > 0) {
+                        var emil = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                        if (!(element.val().match(emil))) {
+                            addStyles(element, 'Enter valid Email Address');
+                            results[element[0].id] = false;
+                        } else {
+                            removeStyles(element);
+                            results[element[0].id] = true;
+                        }
+                    } else {
+                        // removeStyles(element);
+                        // results[element[0].id] = true;
+                    }
+                }
+
+
+                //password
+                if (value === 'password') {
+
+                    if (element.val() !== '') {
+                        var conf = $(element).parent().parent().parent().find('[data-validate*="passwordconfirm"]');
+                        if (!(element.val() === conf.val())) {
+                            addStyles(element, 'Passwords doesn\'t match');
+                            addStyles(conf, 'Passwords doesn\'t match');
+                            results[element[0].id] = false;
+                        } else {
+                            removeStyles(element);
+                            removeStyles(conf);
+                            results[element[0].id] = true;
+                        }
+                    }
+
+                }
+
+                //number
+                if (value === 'number') {
+
+
+                    if (element.val() !== '') {
+                        var num = /^\d*$/;
+
+                        if (!(element.val().match(num))) {
+                            addStyles(element, 'Please enter only numbers');
+                            results[element[0].id] = false;
+                        } else {
+                            removeStyles(element);
+                            results[element[0].id] = true;
+                        }
+                    }
+
+                }
+
+            });
+
+        } else {
             throw "Critical error, Elements ID not defined in : " + element.attr('name') + ". validation falied.!";
             status = false
         }
@@ -167,7 +202,7 @@ var validator = function validateForm(formID) {
             var selector = $(this);
             try {
                 checkAndValidate($(this).data('validate'), selector);
-            }catch (e) {
+            } catch (e) {
                 console.error(e)
                 return false;
             }
@@ -175,14 +210,18 @@ var validator = function validateForm(formID) {
         })
     }
 
+    console.log(results)
+
     $.each(results, function (index, value) {
 
 
         if (value == false) {
             status = false;
+            shake(formID);
             return false
         }
     });
+
 
 
     return status;
