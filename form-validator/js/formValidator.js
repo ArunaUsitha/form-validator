@@ -66,16 +66,16 @@ let validator = function validateForm(parameters) {
     function addStyles(selector, response, type) {
 
         if (type == 'radio') {
-            selector.parent().find('.verror').html(response).css({
+            selector.siblings('.verror').html(response).css({
                 'font-size': '11px',
             })
-            selector.parent().addClass('has-error');
+            selector.closest('.form-group').addClass('has-error');
         } else {
-            selector.parent().find('.verror').html(response).css({
+            selector.siblings('.verror').html(response).css({
                 'font-size': '11px',
                 // 'color': '#D81159'
             });
-            selector.parent().parent().addClass('has-error');
+            selector.closest('.form-group').addClass('has-error');
         }
 
 
@@ -83,16 +83,16 @@ let validator = function validateForm(parameters) {
 
     function removeStyles(selector, type) {
         if (type == 'radio') {
-            selector.parent().find('.verror').html('').css({
+            selector.siblings('.verror').html('').css({
                 'font-size': '11px',
             })
-            selector.parent().removeClass('has-error');
+            selector.closest('.form-group').removeClass('has-error');
         } else {
-            selector.parent().find('.verror').html('').css({
+            selector.siblings('.verror').html('').css({
                 'font-size': '11px',
                 // 'color': '#D81159'
             });
-            selector.parent().parent().removeClass('has-error');
+            selector.closest('.form-group').removeClass('has-error');
         }
     }
 
@@ -104,150 +104,155 @@ let validator = function validateForm(parameters) {
 
         if (element[0].id !== '') {
 
-            let attributes = dataAttributes.split(',');
+            if (element.is(":visible")) {
 
-            $.each(attributes, function (index, value) {
+                let attributes = dataAttributes.split(',');
+                $.each(attributes, function (index, value) {
 
-                //required
-                if (value === 'required') {
+                    //required
+                    if (value === 'required') {
 
-                    // added support for text area propper validation
-                    if (element[0].tagName && element[0].tagName.toLowerCase() == "textarea") {
+                        // added support for text area propper validation
+                        if (element[0].tagName && element[0].tagName.toLowerCase() == "textarea") {
 
-                        if (/^\s*$/g.test(element.val())) {
-                            addStyles(element, 'This field is required!');
-                            results[element[0].id] = false;
+                            if (/^\s*$/g.test(element.val())) {
+                                addStyles(element, 'This field is required!');
+                                results[element[0].id] = false;
+                            } else {
+                                removeStyles(element);
+                                results[element[0].id] = true;
+                            }
+
                         } else {
-                            removeStyles(element);
-                            results[element[0].id] = true;
+                            if (element.val() == '' || element.val() == null) {
+                                addStyles(element, 'This field is required!');
+                                results[element[0].id] = false;
+                            } else {
+                                removeStyles(element);
+                                results[element[0].id] = true;
+                            }
                         }
 
-                    } else {
-                        if (element.val() == '') {
-                            addStyles(element, 'This field is required!');
-                            results[element[0].id] = false;
-                        } else {
-                            removeStyles(element);
-                            results[element[0].id] = true;
-                        }
                     }
 
-                }
 
-
-                //length
-                if ((/length/).test(value)) {
-                    let length = value.split('=')[1];
-                    if (!(element.val().length > length)) {
-                        addStyles(element, 'This value should be ' + length + ' characters');
-                        results[element[0].id] = false;
-                    } else {
-                        // removeStyles(element);
-                        results[element[0].id] = true;
-                    }
-                }
-
-                //telephone no
-                if (value === 'telephone') {
-
-                    let regx = /^[0-9]+$/;
-                    if (element.val().length > 0) {
-                        if (element.val().length < 10 || element.val().length > 10 || !(element.val().match(regx))) {
-                            addStyles(element, 'Enter a valid phone No (10 characters excluding +94)');
+                    //length
+                    if ((/length/).test(value)) {
+                        let length = value.split('=')[1];
+                        if (!(element.val().length > length)) {
+                            addStyles(element, 'This value should be ' + length + ' characters');
                             results[element[0].id] = false;
                         } else {
-                            removeStyles(element);
-                            results[element[0].id] = true;
-                        }
-                    } else {
-                     
-                    }
-                }
-
-                //email
-                if (value === 'email') {
-
-                    if (element.val().length > 0) {
-                        let emil = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                        if (!(element.val().match(emil))) {
-                            addStyles(element, 'Enter valid Email Address');
-                            results[element[0].id] = false;
-                        } else {
-                            removeStyles(element);
-                            results[element[0].id] = true;
-                        }
-                    } else {
-                        // removeStyles(element);
-                        // results[element[0].id] = true;
-                    }
-                }
-
-
-                //password
-                if (value === 'password') {
-
-                    if (element.val() !== '') {
-                        let conf = $(element).parent().parent().parent().find('[data-validate*="passwordconfirm"]');
-                        if (!(element.val() === conf.val())) {
-                            addStyles(element, 'Passwords doesn\'t match');
-                            addStyles(conf, 'Passwords doesn\'t match');
-                            results[element[0].id] = false;
-                        } else {
-                            removeStyles(element);
-                            removeStyles(conf);
+                            // removeStyles(element);
                             results[element[0].id] = true;
                         }
                     }
 
-                }
+                    //telephone no
+                    if (value === 'telephone') {
 
-                //number
-                if (value === 'number') {
-
-
-                    if (element.val() !== '') {
-                        let num = /^\d*$/;
-
-                        if (!(element.val().match(num))) {
-                            addStyles(element, 'Please enter only numbers');
-                            results[element[0].id] = false;
+                        let regx = /^[0-9]+$/;
+                        if (element.val().length > 0) {
+                            if (element.val().length < 10 || element.val().length > 10 || !(element.val().match(regx))) {
+                                addStyles(element, 'Enter a valid phone No (10 characters excluding +94)');
+                                results[element[0].id] = false;
+                            } else {
+                                removeStyles(element);
+                                results[element[0].id] = true;
+                            }
                         } else {
-                            removeStyles(element);
+
+                        }
+                    }
+
+                    //email
+                    if (value === 'email') {
+
+                        if (element.val().length > 0) {
+                            let emil = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                            if (!(element.val().match(emil))) {
+                                addStyles(element, 'Enter valid Email Address');
+                                results[element[0].id] = false;
+                            } else {
+                                removeStyles(element);
+                                results[element[0].id] = true;
+                            }
+                        } else {
+                            // removeStyles(element);
+                            // results[element[0].id] = true;
+                        }
+                    }
+
+
+                    //password
+                    if (value === 'password') {
+
+                        if (element.val() !== '') {
+                            let conf = $(element).parent().parent().parent().find('[data-validate*="passwordconfirm"]');
+                            if (!(element.val() === conf.val())) {
+                                addStyles(element, 'Passwords doesn\'t match');
+                                addStyles(conf, 'Passwords doesn\'t match');
+                                results[element[0].id] = false;
+                            } else {
+                                removeStyles(element);
+                                removeStyles(conf);
+                                results[element[0].id] = true;
+                            }
+                        }
+
+                    }
+
+                    //number
+                    if (value === 'number') {
+
+
+                        if (element.val() !== '') {
+                            let num = /^\d*$/;
+
+                            if (!(element.val().match(num))) {
+                                addStyles(element, 'Please enter only numbers');
+                                results[element[0].id] = false;
+                            } else {
+                                removeStyles(element);
+                                results[element[0].id] = true;
+                            }
+                        }
+
+                    }
+
+
+                    // for radio button
+                    if (value === 'radioBt') {
+                        let btList = $(element).closest('.validate-radio-button-area').find('input:radio[name=' + element[0].name + ']');
+                        let r = false;
+
+                        $.each(btList, function (key, value) {
+                            if ($(value).prop('checked')) {
+                                r = true;
+                            }
+                        });
+
+                        if (r) {
                             results[element[0].id] = true;
+                            removeStyles(element, 'radio');
+                        } else {
+                            results[element[0].id] = false;
+                            addStyles(element, 'Please select option', 'radio');
                         }
+
                     }
 
-                }
 
+                });
 
-                // for radio button
-                if (value === 'radioBt') {
-                    let btList = $(element).closest('.validate-radio-button-area').find('input:radio[name=' + element[0].name + ']');
-                    let r = false;
-
-                    $.each(btList, function (key, value) {
-                        if ($(value).prop('checked')) {
-                            r = true;
-                        }
-                    });
-
-                    if (r) {
-                        results[element[0].id] = true;
-                        removeStyles(element, 'radio');
-                    } else {
-                        results[element[0].id] = false;
-                        addStyles(element, 'Please select option', 'radio');
-                    }
-
-                }
-
-            });
-
-        } else {
-            throw "Critical error, Elements ID not defined in : " + element.attr('name') + ". validation falied.!";
-            status = false
+            } else {
+                removeStyles(element);
+            }
         }
-
+        else {
+            throw "Critical error, Elements ID not defined in : " + element.attr('name') + ". validation falied.!";
+            status = false;
+        }
     }
 
     let clss = '.validate';
@@ -286,7 +291,6 @@ let validator = function validateForm(parameters) {
 
 
     });
-
 
 
     return status;
