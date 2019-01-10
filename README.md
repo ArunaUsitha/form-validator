@@ -39,8 +39,10 @@ A simple form validate plugin used to validate HTML Forms.
 
   then call the method using the form ID
 
+  example:
+  ```javascript
    validator({formID:formID, animate: true, debugMode: false})
-
+```
   and the script shoud be included on the bottom of the page
   
   #### to animate the form Animate.css is required
