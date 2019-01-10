@@ -28,14 +28,18 @@ A simple form validate plugin used to validate HTML Forms.
      
     </form>
 
-  for the input field that you want to validate add the class ##'validate'
-  then add the types you want to validate Ex: password,required,length as comma seperated data attributes
+  for the input field that you want to validate add the class **validate**.
+  then add the types you want to validate 
+  
+  Ex: password,required,length 
+  
+  as comma seperated **data attributes**
 
-  data-validate = 'required,length=10,password,email'
+  **Ex : data-validate = 'required,length=10,password,email'**
 
-  then call the method using the form id
+  then call the method using the form ID
 
-    validator({formID: '#DummyForm', animate: false})
+   validator({formID:formID, animate: true, debugMode: false})
 
   and the script shoud be included on the bottom of the page
   
