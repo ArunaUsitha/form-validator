@@ -14,8 +14,9 @@ A simple form validate plugin used to validate HTML Forms.
   
   example:
      
+     <!-- form to validate -->
      <form id="form-to-validate">
-      <div class="custom-form-user">
+     
          <div class="form-group">
            <label for="testInput" class="col-sm-2 control-label">test input</label>
             <div class="col-sm-8">
@@ -23,10 +24,11 @@ A simple form validate plugin used to validate HTML Forms.
             <span class="verror"></span>
             </div>
          </div>
-     </div>
+     
+     
     </form>
 
-  for the input field that you want to validate add the class 'validate'
+  for the input field that you want to validate add the class ##'validate'
   then add the types you want to validate Ex: password,required,length as comma seperated data attributes
 
   data-validate = 'required,length=10,password,email'
