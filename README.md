@@ -12,8 +12,7 @@ A simple form validate plugin used to validate HTML Forms.
 
   inputs should be in a form group, the bootstrap way.
   
-  example:
-     
+```html
      <!-- form to validate -->
      <form id="form-to-validate">
      
@@ -27,7 +26,8 @@ A simple form validate plugin used to validate HTML Forms.
      
      
     </form>
-
+    
+```
   for the input field that you want to validate add the class **validate**.
   then add the types you want to validate 
   
