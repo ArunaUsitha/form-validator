@@ -3,11 +3,12 @@
 A simple form validate plugin used to validate HTML Forms.  
 
 ## Author :Aruna Usitha
+Simple and light weight Javascript library that validates HTML form elements on the fly.
+currently Bootstrap 3,4 are supported.
+required JQuery library 2.00 or higher.
 
- used to validate html input elements on the fly
- of a form
-
- required Jquery library 2.00 or higher
+## Installation
+Add Plugin CSS top of the page & js file on bottom of the page.
 
 ## usage
 
