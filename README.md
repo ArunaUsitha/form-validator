@@ -69,9 +69,9 @@ v.init();
 After initialization the plugins features can be accessed via Simple API methods
 
 
-`v.status()` return the status of the form. `return : Boolean`. 
-`v.resetForm()`  reset the form. `return : void`
-`v.setServerValidations(data.responseJSON['errors'])`  show server side validations on the form
+- `v.status()` return the status of the form. `return : Boolean`. 
+- `v.resetForm()` reset the form. `return : void`
+- `v.setServerValidations(data.responseJSON['errors'])`  show server side validations on the form 
 
 ### supported methods
 
