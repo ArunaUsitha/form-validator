@@ -1,5 +1,5 @@
 
-# form-validator
+# EZ-validate
 A simple form validate plugin used to validate HTML Forms.  
 
 ## Author :Aruna Usitha
